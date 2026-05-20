@@ -1,7 +1,7 @@
 export const projectsData = {
   "portfolio": {
     id: "portfolio",
-    title: "DevPortfolio 2026",
+    title: "Manish Portfolio 2026",
     category: "Web Apps",
     badge: "FEATURED CASE STUDY",
     description: "A high-performance personal branding platform built with Next.js 14, featuring dynamic routing and optimized asset delivery.",
