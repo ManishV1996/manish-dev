@@ -9,8 +9,10 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@uiw/react-md-editor": "^4.1.0",
     "buffer": "^6.0.3",
     "cloudinary": "^2.10.0",
+    "highlight.js": "^11.11.1",
     "lucide-react": "^0.575.0",
     "mongoose": "^9.2.3",
     "motion": "^12.35.2",
@@ -18,6 +20,9 @@
     "nodemailer": "^8.0.1",
     "react": "19.2.3",
     "react-dom": "19.2.3",
+    "react-markdown": "^10.1.0",
+    "rehype-highlight": "^7.0.2",
+    "remark-gfm": "^4.0.1",
     "three": "^0.184.0"
   },
   "devDependencies": {

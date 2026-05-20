@@ -58,25 +58,90 @@ const stagger  = { animate:{ transition:{ staggerChildren:.07 } } };
 
 // --- CATEGORY CONFIG ---
 const CATEGORY_CONFIG = {
-  REACT:        { color:"bg-blue-500/10 text-blue-300 border-blue-600/30",       dot:"bg-blue-500"   },
-  ARCHITECTURE: { color:"bg-violet-500/10 text-violet-300 border-violet-600/30", dot:"bg-violet-500" },
-  TUTORIAL:     { color:"bg-teal-500/10 text-teal-300 border-teal-600/30",       dot:"bg-teal-500"   },
-  DEVOPS:       { color:"bg-orange-500/10 text-orange-300 border-orange-600/30", dot:"bg-orange-500" },
-  ENGINEERING:  { color:"bg-indigo-500/10 text-indigo-300 border-indigo-600/30", dot:"bg-indigo-500" },
+  "NEXT JS": {
+    color: "bg-black/40 text-white border-gray-700",
+    dot: "bg-white",
+  },
+
+  "REACT JS": {
+    color: "bg-cyan-600/40 text-cyan-800 border-cyan-600/30",
+    dot: "bg-cyan-800",
+  },
+
+  "FULL STACK": {
+    color: "bg-emerald-600/40 text-emerald-800 border-emerald-600/30",
+    dot: "bg-emerald-800",
+  },
+
+  "PYTHON": {
+    color: "bg-yellow-600/40 text-yellow-800 border-yellow-600/30",
+    dot: "bg-yellow-800",
+  },
+
+  "ARCHITECTURE": {
+    color: "bg-violet-600/40 text-violet-800 border-violet-600/30",
+    dot: "bg-violet-800",
+  },
+
+  "PERFORMANCE": {
+    color: "bg-orange-600/40 text-orange-800 border-orange-600/30",
+    dot: "bg-orange-800",
+  },
+
+  "AUTOMATION": {
+    color: "bg-pink-600/40 text-pink-800 border-pink-600/30",
+    dot: "bg-pink-800",
+  },
+
+  "PROJECT SHOWCASE": {
+    color: "bg-indigo-600/40 text-indigo-800 border-indigo-600/30",
+    dot: "bg-indigo-800",
+  },
+
+  "API DEVELOPMENT": {
+    color: "bg-blue-600/40 text-blue-800 border-blue-600/30",
+    dot: "bg-blue-800",
+  },
+
+  "MOBILE DEVELOPMENT": {
+    color: "bg-teal-600/40 text-teal-800 border-teal-600/30",
+    dot: "bg-teal-800",
+  },
 };
 const getCat = (cat) => CATEGORY_CONFIG[cat] || { color:"bg-slate-700/30 text-slate-300 border-slate-600/30", dot:"bg-slate-500" };
-const filterMap = { "All Posts":null, "React":"REACT", "Architecture":"ARCHITECTURE", "Tutorial":"TUTORIAL", "DevOps":"DEVOPS" };
-
+const filterMap = {
+  "All Posts": null,
+  "Next JS": "NEXT JS",
+  "React JS": "REACT JS",
+  "Full Stack": "FULL STACK",
+  "Python": "PYTHON",
+  "Architecture": "ARCHITECTURE",
+  "Performance": "PERFORMANCE",
+  "Automation": "AUTOMATION",
+  "Project Showcase": "PROJECT SHOWCASE",
+  "API Development": "API DEVELOPMENT",
+  "Mobile Development": "MOBILE DEVELOPMENT",
+};
 export default function Blog() {
   const [posts, setPosts]               = useState([]);
   const [loading, setLoading]           = useState(true);
   const [currentPage, setCurrentPage]   = useState(1);
   const [showAll, setShowAll]           = useState(false);
   const [activeFilter, setActiveFilter] = useState("All Posts");
-
   const postsPerPage = 4;
 
-  const filteredPosts  = activeFilter === "All Posts" ? posts : posts.filter(p => p.category === filterMap[activeFilter]);
+  // Add this state alongside your existing ones:
+const [sortOrder, setSortOrder] = useState("newest"); // "newest" | "oldest"
+
+// Replace your existing filteredPosts line with this:
+const sortedPosts = [...posts].sort((a, b) => {
+  const da = new Date(a.createdAt), db = new Date(b.createdAt);
+  return sortOrder === "newest" ? db - da : da - db;
+});
+const filteredPosts  = activeFilter === "All Posts"
+  ? sortedPosts
+  : sortedPosts.filter(p => p.category === filterMap[activeFilter]);
+
   const totalPages     = Math.ceil(filteredPosts.length / postsPerPage);
   const displayedPosts = showAll
     ? filteredPosts
@@ -143,36 +208,64 @@ export default function Blog() {
           </motion.div>
         </section>
 
-        {/* ── FILTERS ── */}
-        <section className="max-w-7xl mx-auto px-6 py-5 flex flex-col md:flex-row justify-between items-center gap-4">
-          <div className="flex items-center gap-2 flex-wrap">
-            {Object.keys(filterMap).map((tab) => (
-              <motion.button
-                key={tab}
-                whileHover={{scale:1.04}} whileTap={{scale:.96}}
-                onClick={() => { setActiveFilter(tab); setCurrentPage(1); setShowAll(false); }}
-                className={`px-4 py-1.5 rounded-full text-sm font-semibold transition-all border ${
-                  activeFilter === tab
-                    ? "bg-blue-600 border-blue-500 text-white shadow-lg shadow-blue-900/30"
-                    : "bg-[#111927] border-slate-700/50 text-gray-400 hover:text-white hover:border-slate-600"
-                }`}
-              >
-                {tab}
-                {tab === "All Posts" && posts.length > 0 && (
-                  <span className={`ml-1.5 text-[10px] px-1.5 py-0.5 rounded-full ${activeFilter === tab ? "bg-blue-500" : "bg-slate-700"}`}>
-                    {posts.length}
-                  </span>
-                )}
-              </motion.button>
-            ))}
-          </div>
-          <div className="flex items-center gap-2 text-gray-500 text-sm bg-[#111927] border border-slate-800 px-4 py-2 rounded-xl">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 4h18M7 8h10M11 12h4" />
-            </svg>
-            <span>Sort by: Newest</span>
-          </div>
-        </section>
+       {/* ── FILTERS ── */}
+<section className="max-w-7xl mx-auto px-6 py-4">
+  <div className="flex items-center gap-3">
+
+    {/* Scrollable filter pills */}
+    <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-hide flex-1 min-w-0 pb-0.5">
+      {Object.keys(filterMap).map((tab) => (
+        <motion.button
+          key={tab}
+          whileTap={{ scale: 0.96 }}
+          onClick={() => { setActiveFilter(tab); setCurrentPage(1); setShowAll(false); }}
+          className={`flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all border whitespace-nowrap ${
+            activeFilter === tab
+              ? "bg-blue-600 border-blue-500 text-white shadow-[0_0_0_3px_rgba(37,99,235,0.2)]"
+              : "bg-[#0b1220]/60 border-slate-700/40 text-slate-400 hover:text-white hover:border-slate-600"
+          }`}
+        >
+          {tab}
+          {tab === "All Posts" && posts.length > 0 && (
+            <span className={`ml-1.5 text-[10px] px-1.5 py-0.5 rounded-full ${
+              activeFilter === tab ? "bg-white/20" : "bg-slate-700/60"
+            }`}>
+              {posts.length}
+            </span>
+          )}
+        </motion.button>
+      ))}
+    </div>
+
+    {/* Sort toggle */}
+    <div className="flex-shrink-0 flex items-center gap-1 bg-[#0b1220]/60 border border-slate-700/40 rounded-xl p-1">
+      {["newest", "oldest"].map((order) => (
+        <button
+          key={order}
+          onClick={() => { setSortOrder(order); setCurrentPage(1); }}
+          className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all capitalize ${
+            sortOrder === order
+              ? "bg-slate-700 text-white"
+              : "text-slate-500 hover:text-slate-300"
+          }`}
+        >
+          {order === "newest" ? "↓ Newest" : "↑ Oldest"}
+        </button>
+      ))}
+    </div>
+
+  </div>
+
+  {/* Divider + meta */}
+  <div className="mt-3 h-px bg-gradient-to-r from-transparent via-slate-700/30 to-transparent" />
+  <div className="mt-2 flex items-center gap-2 text-[11px] text-slate-600">
+    <span>{activeFilter}</span>
+    <span className="w-1 h-1 rounded-full bg-slate-700" />
+    <span>{filteredPosts.length} article{filteredPosts.length !== 1 ? "s" : ""}</span>
+    <span className="w-1 h-1 rounded-full bg-slate-700" />
+    <span>Sorted by {sortOrder}</span>
+  </div>
+</section>
 
         {/* ── BLOG GRID ── */}
         <section className="max-w-7xl mx-auto px-6 mb-8">
@@ -211,9 +304,9 @@ export default function Blog() {
                   >
                     {/* Image */}
                     <div className="relative h-40 overflow-hidden bg-gradient-to-br from-slate-800 to-slate-900">
-                      <span className={`absolute top-3 left-3 z-10 flex items-center gap-1.5 text-[10px] font-bold px-2.5 py-1 rounded-full border ${cat.color}`}>
+                      <span className={`absolute top-3 shadow-xl left-2 z-10 flex items-center gap-1.5 text-[10px] font-bold px-2.5 py-1 rounded-full border ${cat.color}`}>
                         <span className={`w-1.5 h-1.5 rounded-full ${cat.dot}`} />
-                        {post.category || "ENGINEERING"}
+                        {post.category}
                       </span>
                       <button className="absolute top-3 right-3 z-10 w-7 h-7 bg-slate-900/70 hover:bg-slate-800 border border-slate-700/50 rounded-full flex items-center justify-center text-gray-400 hover:text-white transition text-xs">
                         🔖
@@ -233,8 +326,17 @@ export default function Blog() {
                     {/* Content */}
                     <div className="p-4 flex-grow flex flex-col">
                       <div className="flex items-center justify-between text-gray-600 text-[11px] mb-3">
-                        <span>📅 {new Date(post.createdAt).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' })}</span>
-                        <span>⏱ {post.readTime || "5 min read"}</span>
+<span>📅 {new Date(post.createdAt).toLocaleDateString('en-IN', {
+  day: 'numeric',
+  month: 'short',
+  year: 'numeric',
+  timeZone: 'Asia/Kolkata'
+})} · {new Date(post.createdAt).toLocaleTimeString('en-IN', {
+  hour: '2-digit',
+  minute: '2-digit',
+  timeZone: 'Asia/Kolkata',
+  hour12: true
+})} IST</span>                        <span>⏱ {post.readTime || "5 min read"}</span>
                       </div>
                       <h3 className="text-sm font-bold mb-2 group-hover:text-blue-400 transition-colors leading-snug line-clamp-2">
                         {post.title}

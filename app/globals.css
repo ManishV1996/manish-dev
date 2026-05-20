@@ -10,3 +10,25 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+.w-md-editor {
+  --md-editor-bg: #0b1220 !important;
+  background-color: #0b1220 !important;
+}
+.w-md-editor-toolbar {
+  background-color: #111927 !important;
+  border-bottom: 1px solid #1e293b !important;
+}
+.w-md-editor-text-pre > code,
+.w-md-editor-text-input,
+.w-md-editor textarea {
+  background-color: #0b1220 !important;
+  color: #e2e8f0 !important;
+}
+.wmde-markdown {
+  background-color: #0b1220 !important;
+  color: #e2e8f0 !important;
+}

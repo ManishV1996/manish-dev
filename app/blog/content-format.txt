@@ -1,0 +1,217 @@
+## Introduction
+
+APIs are the backbone of modern web and mobile applications. Whether you are building a portfolio, CRM system, eCommerce platform, or mobile app, APIs enable communication between frontend and backend systems.
+
+Node.js and Express.js have become one of the most popular combinations for creating REST APIs because they are lightweight, fast, and highly scalable.
+
+In this article, we will learn how to create production-ready REST APIs using:
+
+- Node.js
+- Express.js
+- MongoDB
+- JWT Authentication
+- Middleware
+- Error Handling
+- API Security
+- Deployment strategies
+
+## Why Use REST APIs?
+
+REST APIs allow applications to communicate using HTTP methods like GET, POST, PUT, and DELETE.
+
+They help developers separate frontend and backend logic, making applications easier to scale and maintain.
+
+**Benefits of REST APIs:**
+
+- Reusable backend services
+- Faster frontend development
+- Mobile app integration
+- Better scalability
+- Easy third-party integrations
+
+## Setting Up the Backend
+
+First, initialize your Node.js project:
+
+```bash
+npm init -y
+```
+
+Install dependencies:
+
+```bash
+npm install express mongoose cors dotenv jsonwebtoken bcryptjs
+```
+
+Create the server:
+
+```js
+const express = require("express");
+const app = express();
+
+app.use(express.json());
+
+app.listen(5000, () => {
+  console.log("Server Running");
+});
+```
+
+This creates a basic Express server ready for API development.
+
+## Connecting MongoDB
+
+MongoDB is widely used because of its flexible document structure and scalability.
+
+```js
+const mongoose = require("mongoose");
+
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log("MongoDB Connected"))
+  .catch(err => console.log(err));
+```
+
+Using environment variables keeps credentials secure and production ready.
+
+## Creating API Routes
+
+REST APIs use routes for handling requests.
+
+```js
+app.get("/api/users", (req, res) => {
+  res.json({ message: "Users API Working" });
+});
+```
+
+**Recommended project structure:**
+src/
+├── routes/
+├── controllers/
+├── models/
+├── middleware/
+├── config/
+└── server.js
+
+This architecture improves maintainability for large applications.
+
+## Authentication with JWT
+
+Authentication is essential for securing APIs. JWT (JSON Web Token) helps verify users securely.
+
+```bash
+npm install jsonwebtoken
+```
+
+Generate a token:
+
+```js
+const token = jwt.sign(
+  { id: user._id },
+  process.env.JWT_SECRET,
+  { expiresIn: "7d" }
+);
+```
+
+Protected routes ensure only authenticated users can access private resources.
+
+## Middleware in APIs
+
+Middleware acts between request and response.
+
+```js
+const authMiddleware = (req, res, next) => {
+  const token = req.headers.authorization;
+
+  if (!token) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+
+  next();
+};
+```
+
+**Middleware is commonly used for:**
+
+- Authentication
+- Logging
+- Validation
+- Error handling
+- Security
+
+## API Validation
+
+Validating request data prevents invalid or malicious input.
+
+```js
+if (!email || !password) {
+  return res.status(400).json({ message: "All fields required" });
+}
+```
+
+You can also use libraries like **Joi**, **Express Validator**, or **Yup** for schema-based validation.
+
+## Error Handling
+
+Centralized error handling keeps APIs clean and consistent.
+
+```js
+app.use((err, req, res, next) => {
+  res.status(500).json({ message: err.message });
+});
+```
+
+Proper error handling helps developers debug issues quickly.
+
+## API Security Best Practices
+
+Security is extremely important for production APIs.
+
+**Important practices:**
+
+- Use HTTPS
+- Hash passwords with bcrypt
+- Store secrets in `.env`
+- Validate all incoming requests
+- Rate limit API requests
+- Use Helmet middleware
+- Enable CORS properly
+
+```bash
+npm install helmet
+```
+
+## API Performance Optimization
+
+For scalable applications, consider:
+
+- Caching responses
+- Optimizing database queries
+- Enabling compression
+- Using pagination
+- Avoiding unnecessary API calls
+
+**Pagination example:**
+GET /api/users?page=1&limit=10
+
+This improves response time and reduces server load.
+
+## Deploying APIs
+
+You can deploy Node.js APIs on:
+
+- **Render** — free tier, easy setup
+- **Railway** — instant deploys
+- **Vercel** — serverless functions
+- **AWS / DigitalOcean** — full control VPS
+
+**Always remember to:**
+
+- Use environment variables
+- Enable PM2 for process management
+- Configure a reverse proxy (Nginx)
+- Enable SSL certificates
+
+## Conclusion
+
+REST APIs are essential for modern application development. Using Node.js and Express allows developers to build scalable, fast, and maintainable backend systems.
+
+By implementing authentication, validation, security, and optimized architecture, you can create professional APIs ready for real-world applications.
