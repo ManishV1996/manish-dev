@@ -438,7 +438,7 @@ const MainExperiencePage = ({ onCareerClick }) => (
 
         <div className="flex gap-3">
           <motion.a
-            href="https://drive.google.com/uc?export=download&id=1s8wzR00J9j443gdnJ1z6aq0kNBrVeZWK"
+            href="https://drive.google.com/file/d/1br4ZS6gsBhyXZK1rxYfzab1uRz_9zdDA/view?usp=sharing"
             target="_blank" rel="noopener noreferrer"
             whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
             className="bg-blue-600 hover:bg-blue-700 px-6 py-2.5 rounded-lg text-sm font-bold flex items-center gap-2 transition shadow-lg shadow-blue-900/20"
